@@ -1,15 +1,15 @@
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local Humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
 
+local AIEnabled = true
+
 task.spawn(function()
     while true do
-        task.wait(0.1)  -- mobile-safe delay
-
+        task.wait(0.1)
         if AIEnabled and Humanoid and LocalPlayer.Character then
             pcall(function()
-                -- Find closest target (example: revivable player)
+                -- move toward nearest player
                 local closestPlayer = nil
                 local shortestDist = math.huge
                 for _, plr in pairs(Players:GetPlayers()) do
@@ -22,11 +22,9 @@ task.spawn(function()
                     end
                 end
 
-                -- Move toward target if found
                 if closestPlayer then
                     Humanoid:MoveTo(closestPlayer.Character.HumanoidRootPart.Position)
                 else
-                    -- wander randomly if no target
                     local root = LocalPlayer.Character.HumanoidRootPart
                     local offset = Vector3.new(math.random(-10,10),0,math.random(-10,10))
                     Humanoid:MoveTo(root.Position + offset)
