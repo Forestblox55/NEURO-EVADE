@@ -1,47 +1,33 @@
--- load Rayfield
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
--- create window
 local Window = Rayfield:CreateWindow({
-   Name = "Evade Ultra AI 🤖",
+   Name = "NEURO-EVADE 🤖",
    LoadingTitle = "Loading...",
-   LoadingSubtitle = "by you 😔",
+   LoadingSubtitle = "mobile optimized 😔",
    ConfigurationSaving = {
       Enabled = false
-   }
+   },
+   KeySystem = false
 })
 
--- tabs
+-- MOBILE FRIENDLY TAB
 local MainTab = Window:CreateTab("Main", 4483362458)
-local PlayerTab = Window:CreateTab("Player", 4483362458)
 
--- toggle (AI ON/OFF)
+-- TOGGLE
 local AIEnabled = false
 
 MainTab:CreateToggle({
-   Name = "Enable Ultra AI",
+   Name = "Enable AI",
    CurrentValue = false,
    Callback = function(Value)
       AIEnabled = Value
-      print("AI:", Value)
    end,
 })
 
--- example button
+-- DEBUG BUTTON
 MainTab:CreateButton({
-   Name = "Test Print",
+   Name = "Test",
    Callback = function()
-      print("Rayfield is working 😔")
-   end,
-})
-
--- player mod example
-PlayerTab:CreateSlider({
-   Name = "WalkSpeed",
-   Range = {16, 100},
-   Increment = 1,
-   CurrentValue = 16,
-   Callback = function(Value)
-      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+      print("working 😔")
    end,
 })
