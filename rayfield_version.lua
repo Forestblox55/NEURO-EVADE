@@ -1,33 +1,37 @@
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
 
-local Window = Rayfield:CreateWindow({
-   Name = "NEURO-EVADE 🤖",
-   LoadingTitle = "Loading...",
-   LoadingSubtitle = "mobile optimized 😔",
-   ConfigurationSaving = {
-      Enabled = false
-   },
-   KeySystem = false
-})
+task.spawn(function()
+    while true do
+        task.wait(0.1)  -- mobile-safe delay
 
--- MOBILE FRIENDLY TAB
-local MainTab = Window:CreateTab("Main", 4483362458)
+        if AIEnabled and Humanoid and LocalPlayer.Character then
+            pcall(function()
+                -- Find closest target (example: revivable player)
+                local closestPlayer = nil
+                local shortestDist = math.huge
+                for _, plr in pairs(Players:GetPlayers()) do
+                    if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                        local dist = (plr.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                        if dist < shortestDist then
+                            shortestDist = dist
+                            closestPlayer = plr
+                        end
+                    end
+                end
 
--- TOGGLE
-local AIEnabled = false
-
-MainTab:CreateToggle({
-   Name = "Enable AI",
-   CurrentValue = false,
-   Callback = function(Value)
-      AIEnabled = Value
-   end,
-})
-
--- DEBUG BUTTON
-MainTab:CreateButton({
-   Name = "Test",
-   Callback = function()
-      print("working 😔")
-   end,
-})
+                -- Move toward target if found
+                if closestPlayer then
+                    Humanoid:MoveTo(closestPlayer.Character.HumanoidRootPart.Position)
+                else
+                    -- wander randomly if no target
+                    local root = LocalPlayer.Character.HumanoidRootPart
+                    local offset = Vector3.new(math.random(-10,10),0,math.random(-10,10))
+                    Humanoid:MoveTo(root.Position + offset)
+                end
+            end)
+        end
+    end
+end)
